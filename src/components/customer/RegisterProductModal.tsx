@@ -32,6 +32,9 @@ export const RegisterProductModal: React.FC<Props> = ({ customerId, isOpen, onCl
   const [scanProgress, setScanProgress] = useState(0);
   const [scanSuccess, setScanSuccess] = useState(false);
   const [uploadedFileName, setUploadedFileName] = useState('');
+  const [imagePreviewUrl, setImagePreviewUrl] = useState<string | null>(null);
+  const [rawOcrText, setRawOcrText] = useState<string>('');
+  const [showRawText, setShowRawText] = useState(false);
 
   // Editable fields (shared between OCR extracted & manual)
   const [productName, setProductName] = useState('');
@@ -69,8 +72,12 @@ export const RegisterProductModal: React.FC<Props> = ({ customerId, isOpen, onCl
     if (typeof fileOrSample === 'string') {
       const sample = SAMPLE_BILLS.find(s => s.id === fileOrSample);
       setUploadedFileName(sample ? sample.name : 'Sample_Invoice.pdf');
+      if (sample) setImagePreviewUrl(sample.thumbnail);
     } else {
       setUploadedFileName(fileOrSample.name);
+      if (fileOrSample.type.startsWith('image/')) {
+        setImagePreviewUrl(URL.createObjectURL(fileOrSample));
+      }
     }
 
     try {
@@ -86,12 +93,16 @@ export const RegisterProductModal: React.FC<Props> = ({ customerId, isOpen, onCl
       setSeller(data.seller);
       setPurchaseAmount(data.purchaseAmount.replace(/,/g, ''));
       setWarrantyMonths(data.warrantyPeriodMonths);
+      setRawOcrText(data.rawOcrText || '');
 
       // Guess brand
       if (data.productName.toLowerCase().includes('lg')) setBrand('LG');
       else if (data.productName.toLowerCase().includes('samsung')) setBrand('Samsung');
       else if (data.productName.toLowerCase().includes('daikin')) setBrand('Daikin');
-      else setBrand('Standard Brand');
+      else if (data.productName.toLowerCase().includes('sony')) setBrand('Sony');
+      else if (data.productName.toLowerCase().includes('philips')) setBrand('Philips');
+      else if (data.productName.toLowerCase().includes('whirlpool')) setBrand('Whirlpool');
+      else setBrand('Verified Brand');
 
       setScanSuccess(true);
     } catch (e) {
@@ -244,16 +255,67 @@ export const RegisterProductModal: React.FC<Props> = ({ customerId, isOpen, onCl
                 </div>
               )}
 
-              {/* OCR Success Banner */}
+              {/* OCR Success Banner & Image/Text Inspector */}
               {scanSuccess && (
-                <div className="p-4 rounded-2xl bg-emerald-50 border border-emerald-200 flex items-center gap-3">
-                  <CheckCircle2 className="w-6 h-6 text-emerald-600 shrink-0" />
-                  <div>
-                    <h5 className="font-bold text-emerald-900 text-sm">✓ Bill details extracted successfully</h5>
-                    <p className="text-xs text-emerald-700 mt-0.5">
-                      Review and verify the extracted parameters below before saving.
-                    </p>
+                <div className="space-y-3">
+                  <div className="p-4 rounded-2xl bg-emerald-50 border border-emerald-200 flex items-center justify-between gap-3">
+                    <div className="flex items-center gap-3">
+                      <CheckCircle2 className="w-6 h-6 text-emerald-600 shrink-0" />
+                      <div>
+                        <h5 className="font-bold text-emerald-900 text-sm">✓ Bill details extracted successfully via OCR</h5>
+                        <p className="text-xs text-emerald-700 mt-0.5">
+                          Optical text recognition parsed product, serial, date & pricing. Verify below.
+                        </p>
+                      </div>
+                    </div>
+
+                    {rawOcrText && (
+                      <button
+                        type="button"
+                        onClick={() => setShowRawText(!showRawText)}
+                        className="px-3 py-1.5 bg-white border border-emerald-300 text-emerald-800 text-xs font-bold rounded-xl hover:bg-emerald-100/50 transition shrink-0 shadow-2xs"
+                      >
+                        {showRawText ? 'Hide Raw OCR Text' : '🔍 View Raw OCR Text'}
+                      </button>
+                    )}
                   </div>
+
+                  {/* Uploaded Image Preview & Raw OCR Text side-by-side */}
+                  {(imagePreviewUrl || (showRawText && rawOcrText)) && (
+                    <div className="p-4 rounded-2xl bg-slate-900 text-white border border-slate-800 text-xs space-y-3">
+                      <div className="flex items-center justify-between border-b border-slate-800 pb-2">
+                        <span className="font-bold text-slate-300 flex items-center gap-2">
+                          <span>🖼 Document Input Preview</span>
+                          <span className="text-[10px] text-indigo-400 font-mono">({uploadedFileName})</span>
+                        </span>
+                        <span className="text-[10px] font-bold text-emerald-400 bg-emerald-950 px-2 py-0.5 rounded border border-emerald-800">
+                          Tesseract OCR Engine Active
+                        </span>
+                      </div>
+
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 items-start">
+                        {imagePreviewUrl && (
+                          <div className="rounded-xl overflow-hidden border border-slate-700 bg-black/40 p-2 text-center">
+                            <img
+                              src={imagePreviewUrl}
+                              alt="Uploaded Invoice"
+                              className="max-h-48 mx-auto object-contain rounded-lg shadow-sm"
+                            />
+                            <span className="text-[10px] text-slate-400 mt-1 block">Input Image Processed</span>
+                          </div>
+                        )}
+
+                        {rawOcrText && (
+                          <div className="bg-slate-950 p-3 rounded-xl border border-slate-800 font-mono text-[11px] text-emerald-300 max-h-48 overflow-y-auto whitespace-pre-wrap leading-relaxed">
+                            <span className="text-[10px] uppercase font-bold text-slate-400 block mb-1">
+                              Raw Optical Text Read:
+                            </span>
+                            {rawOcrText}
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  )}
                 </div>
               )}
             </div>

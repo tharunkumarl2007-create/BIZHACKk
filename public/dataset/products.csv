@@ -1,0 +1,9 @@
+id,customer_id,name,category,brand,model,serial_number,purchase_date,warranty_months,warranty_expiry_date,purchase_amount,seller,bill_filename,status
+PROD-001,CUST-001,LG Washing Machine 8kg Front Load,Home Appliances,LG,FHM1208ZDL,LGWM12345,2026-06-12,24,2028-06-12,38990.00,Reliance Digital Bellandur,LG_Bill_Inv_2026.pdf,active
+PROD-002,CUST-001,Samsung Double Door Refrigerator 324L,Kitchen Appliances,Samsung,RT34T4513S8,SM-REF-99238,2025-10-15,24,2027-10-15,34500.00,Croma Retail Koramangala,Samsung_Fridge_Bill.png,active
+PROD-003,CUST-001,Sony Bravia 55 inch 4K Ultra HD TV,Consumer Electronics,Sony,KD-55X74K,SNY-TV-55421,2024-03-10,12,2025-03-10,59990.00,Vijay Sales Bangalore,Sony_TV_Invoice.jpg,expired
+PROD-004,CUST-002,Daikin 1.5 Ton 5 Star Inverter AC,Air Conditioners,Daikin,FTKM50U,DKN-AC-88120,2026-02-05,36,2029-02-05,44200.00,Girias Electronics Whitefield,Daikin_AC_TaxInvoice.pdf,active
+PROD-005,CUST-003,HP Spectre x360 14" OLED Laptop,Consumer Electronics,HP,14-ef0003TU,HP-SP-77621,2025-11-20,12,2026-11-20,119990.00,HP World Indiranagar,HP_Spectre_Invoice.pdf,active
+PROD-006,CUST-004,Philips Digital Air Fryer HD9252,Kitchen Appliances,Philips,HD9252/90,PH-AF-33901,2024-05-18,24,2026-05-18,8990.00,Amazon India Retail,Amazon_Philips_Invoice.pdf,expired
+PROD-007,CUST-005,Whirlpool 29L Convection Microwave,Kitchen Appliances,Whirlpool,MAGICOOK-PRO,WHP-MW-44119,2026-01-10,24,2028-01-10,14200.00,Reliance Digital Yelahanka,Whirlpool_Microwave.pdf,active
+PROD-008,CUST-002,Dyson V12 Detect Slim Cordless Vacuum,Home Appliances,Dyson,SV20,DYS-VAC-66120,2026-04-14,24,2028-04-14,49900.00,Dyson Official Store Bangalore,Dyson_Official_Bill.pdf,active

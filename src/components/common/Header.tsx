@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { UserRole, NotificationItem } from '../../types';
-import { Shield, Bell, User, LogOut, RotateCcw, Check, Sparkles } from 'lucide-react';
+import { Shield, Bell, User, LogOut, RotateCcw, Check, Sparkles, Download } from 'lucide-react';
 
 interface Props {
   currentRole: UserRole;
@@ -77,6 +77,17 @@ export const Header: React.FC<Props> = ({
 
         {/* Right Actions: Reset, Notifications, User info, Logout */}
         <div className="flex items-center gap-2 sm:gap-3">
+          {/* Download Dataset Button */}
+          <a
+            href="/WARRANTY_PLUS_DATASET.zip"
+            download="WARRANTY_PLUS_DATASET.zip"
+            title="Download Complete Dataset (CSV + ZIP)"
+            className="flex items-center gap-1.5 px-3 py-1.5 bg-emerald-50 hover:bg-emerald-100 text-emerald-700 border border-emerald-200 rounded-xl text-xs font-bold transition shadow-2xs"
+          >
+            <Download className="w-3.5 h-3.5 text-emerald-600" />
+            <span className="hidden sm:inline">Download Dataset (ZIP)</span>
+          </a>
+
           {/* Quick reset mock data */}
           <button
             onClick={onResetData}

@@ -1,0 +1,6 @@
+id,name,email,phone,address,city,pincode,joined_date
+CUST-001,Priya Sharma,priya.sharma@example.com,+91 98201 44552,"Flat 402, Green Glen Heights, Bellandur",Bengaluru,560103,2025-04-10
+CUST-002,Rahul Verma,rahul.verma@example.com,+91 98450 11234,"B-12, Palm Meadows, Whitefield",Bengaluru,560066,2025-08-15
+CUST-003,Ananya Iyer,ananya.iyer@example.com,+91 97112 88990,"House 88, 4th Main, Indiranagar",Bengaluru,560038,2026-01-20
+CUST-004,Vikram Patel,vikram.patel@example.com,+91 99001 77332,"Penthouse 14, Silver Oak, Koramangala",Bengaluru,560034,2025-11-05
+CUST-005,Neha Singh,neha.singh@example.com,+91 96500 22119,"Villa 7, Prestige Oasis, Yelahanka",Bengaluru,560064,2026-03-12

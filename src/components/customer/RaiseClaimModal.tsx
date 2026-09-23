@@ -13,7 +13,10 @@ import {
   CheckCircle2,
   X,
   AlertTriangle,
-  Info
+  Info,
+  Camera,
+  Trash2,
+  Plus
 } from 'lucide-react';
 
 interface Props {
@@ -47,6 +50,18 @@ export const RaiseClaimModal: React.FC<Props> = ({
     'https://images.unsplash.com/photo-1584992236310-6edddc08acff?w=400&auto=format&fit=crop&q=80'
   ]);
   const [submittedClaim, setSubmittedClaim] = useState<Claim | null>(null);
+
+  const handlePhotoUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files) {
+      const filesArray = Array.from(e.target.files);
+      const newUrls = filesArray.map(file => URL.createObjectURL(file));
+      setPhotosAttached(prev => [...prev, ...newUrls]);
+    }
+  };
+
+  const handleRemovePhoto = (indexToRemove: number) => {
+    setPhotosAttached(prev => prev.filter((_, i) => i !== indexToRemove));
+  };
 
   useEffect(() => {
     if (initialProduct) {
@@ -256,21 +271,64 @@ export const RaiseClaimModal: React.FC<Props> = ({
 
             {/* Upload problem photos/videos */}
             <div>
-              <label className="text-xs font-bold text-slate-700 block mb-1">Upload Problem Photos / Video Clip</label>
-              <div className="border border-dashed border-slate-300 rounded-xl p-3 flex items-center justify-between bg-slate-50">
-                <div className="flex items-center gap-3">
-                  <Upload className="w-5 h-5 text-indigo-500" />
-                  <span className="text-xs text-slate-600 font-medium">
-                    {photosAttached.length} media file(s) attached
+              <div className="flex items-center justify-between mb-1.5">
+                <label className="text-xs font-bold text-slate-700 block">
+                  Upload Problem Photos / Video Clip
+                </label>
+                <span className="text-[11px] font-semibold text-indigo-600">
+                  {photosAttached.length} photo(s) attached
+                </span>
+              </div>
+
+              {/* Hidden real file input */}
+              <input
+                type="file"
+                id="claim-photo-input"
+                accept="image/*"
+                multiple
+                className="hidden"
+                onChange={handlePhotoUpload}
+              />
+
+              <div className="border border-dashed border-indigo-200 rounded-2xl p-4 bg-indigo-50/20 hover:bg-indigo-50/40 transition">
+                <div className="flex flex-col sm:flex-row items-center justify-between gap-3">
+                  <label
+                    htmlFor="claim-photo-input"
+                    className="cursor-pointer inline-flex items-center gap-2 px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl text-xs font-bold shadow-sm transition"
+                  >
+                    <Camera className="w-4 h-4" />
+                    <span>Upload Photos from Device</span>
+                  </label>
+                  <span className="text-[11px] text-slate-500 text-center sm:text-right">
+                    Click to select JPG, PNG images of the appliance defect
                   </span>
                 </div>
-                <button
-                  type="button"
-                  onClick={() => alert('Simulated photo attachment: Photo successfully captured.')}
-                  className="px-3 py-1.5 bg-white border border-slate-200 text-xs font-semibold text-slate-700 rounded-lg hover:bg-slate-100 transition shadow-2xs"
-                >
-                  Attach Photo
-                </button>
+
+                {/* Thumbnails of attached photos with removal */}
+                {photosAttached.length > 0 && (
+                  <div className="mt-3 grid grid-cols-3 sm:grid-cols-4 gap-2.5 pt-3 border-t border-indigo-100">
+                    {photosAttached.map((url, idx) => (
+                      <div
+                        key={idx}
+                        className="relative group rounded-xl overflow-hidden border border-slate-200 aspect-video bg-black/10 shadow-2xs"
+                      >
+                        <img
+                          src={url}
+                          alt={`Problem photo ${idx + 1}`}
+                          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                        />
+                        <button
+                          type="button"
+                          onClick={() => handleRemovePhoto(idx)}
+                          className="absolute top-1 right-1 p-1 bg-rose-600/90 hover:bg-rose-700 text-white rounded-md transition shadow-sm"
+                          title="Remove photo"
+                        >
+                          <X className="w-3.5 h-3.5" />
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+                )}
               </div>
             </div>
 

@@ -22,6 +22,7 @@ export interface ExtractedBillData {
   purchaseAmount: string;
   warrantyPeriodMonths: number;
   confidenceScore: number;
+  rawOcrText?: string;
 }
 
 export interface Product {
